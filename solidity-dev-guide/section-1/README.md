@@ -18,11 +18,13 @@
         * Browser extension that allows users to interact with the network
 
 ## Metamask account
+* External accounts: 'human' owned
 * Account address: unique identifier that can be shared, shows others who "you are"
     * Same address will be used on all networks (Rpsten, Kovan, Rinkeby, etc)
+    * Is a hashed version of the public key
 * Public key: allows you to be a receiver in a transaction
 * Private key: reqyured to "unlock" funds received. Used to authorize the sending of funds from your account to other accounts
-* All 3 are hexadecimal numbers
+* All 3 are hexadecimal encoded numbers
 
 ## Faucet
 * Used to fund account with test ETH (by network)
@@ -50,5 +52,40 @@
 * Many other transactions (from other accounts) will send transactions to the same node
 * The node then assembles all transactions into a 'block' and runs 'validation logic' on the block
     * 'validation logic' is intentionally oversimplified here. In principle, it refers to mining
-    * 
+
+## Smart contracts and accounts
+* An account controlled by code
+* Contract account properties
+    * balance: amount of ether this accounts owns
+    * storage: data storage for this contract
+        * any type of data relevant to the app we are trying to make
+    * code: raw machine code for this contract
+        * compiled down instructions for the contract
+* Account is assigned to a specific network and cannot be access across networks
+    * This differs from external metamask account where an address can be used on all networks
+* A user creates the smart contracts source code and then deploys it on a network
+    * This deployment creates an instance of the contract (referred to as the "contracts account") on the network
+    * We can take one contracts source code and deploy it multiple times to a network (or multiple networks)
+        * This is extremely similar to 'class' and 'instance' in the programming world of python, java, et al
+        * The source code acts as a 'class'
+        * The multiple deployments act as 'instances'
+
+## Solidity
+* Language used specifically to author smart contracts
+    * Written in .sol files
+    * Strongly typed language
+    * Similar to Javascript
+* Solidity compiler produces two separate files
+    * Byte code deployed to the network (and stuffed into our contracts account)
+    * Application Binary Interface (ABI)
+        * Front-end cannot interact with byte code deployed on the blockchain
+        * ABI translates the smart contract for our front-end into something that is legible, allowing us to interact with the smart contract
+
+## Setting up Remix
+* Use compiler: 0.4.17+commit.bdeb9e52
+* Compiler configuration: auto compile
+
+## Writing the first contract
+
+
 
