@@ -114,6 +114,56 @@
 * Hit deploy
 * Deployed contracts will populate in the bottom left
 
+## Behind the Scenes of Deployment
+* Compared with "money sending transactions" where the "to" field is populated with an address, a "contract transaction" will have an empty "to" field
+* If a sender creates a contract transaction (so by extension to "to" field will be blank) then by construction the sender is creating a new contract
+
+## More on Running Functions Than You Want to Know
+* You need to submit a transaction anytime you want to change something on the blockchain
+* We have to submit a transaction and wait for it to be approved before we can say the data has been changed
+* Running contract functions
+    * "Calling" a function
+        * cannot modify the contracts data
+        * can return data
+        * runs instantly
+        * free to do
+    * Sending a transaction to a function
+        * can modify a contract's data
+        * takes time to execute
+            * testnet will show instanteous response, mainnet will take time to get the transaction confirmed
+        * returns the transaction hash
+        * costs money
+
+## Wei vs Ether
+* 1 ether = 10**18 wei
+    * minimum wei = 1 or 10**-18 ether
+* 1 ether = 10**15 kwei
+* 1 ether = 10**12 mwei
+* 1 ether = 10**9  gwei
+* 1 ether = 10**6 szabo
+* 1 ether = 10**3 finney
+
+## Gas and transactions
+* Cost to run your code on the blockchain
+* Gas is required anytime a user wants to send a TRANSACTION is sent to the network
+* gasPrice = amount of wei the sender is willing to pay PER UNIT of gas to get this transaction processed
+* startGas/gasLimit = units of gas that this transaction can consume (total gas we're willing to spend on the transaction)
+* Example:
+    * Assume we write a func called "doMath" which does 4 operations (adds two numbers, subtracts two numbers, multiplys two numbers, checks if one number is equal to 0)
+    * We set the gasPrice at 300, meaning we are willing to spend 300 wei for every unit of gas
+    * We set the gasLimit at 10, meaning we are willing to spend 10 units of gas
+    * In total we are willing to spend 300 wei/gas * 10 units of gas = 3000 wei on the transaction
+    * Assume to cost of calling doMath is:
+        * add = 3 gas
+        * subtract = 3 gas
+        * multiply = 5 gas
+        * equality = 3 gas
+        * total gas required for the function = 3 + 3 + 5 + 3 = 14 gas
+    * We've specfied the gas limit at 10, so our function would halt before executing the multiply operation given we'd breach our gas limit if multiply was run (3 + 3 + 5 = 11 gas > 10 gas limit)
+    * Adjusting the gas limit > 14 gas would allow us to call doMath and complete all of its operations
+    * The total cost to call the function would be:
+        * 300 wei/gas * 14 gas = 4,200 wei > 3,000 wei we were willing to pay to execute the transaction
+
 
 
 
