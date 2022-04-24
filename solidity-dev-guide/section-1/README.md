@@ -93,8 +93,13 @@
 * Function types:
     * public: anyone with account can call this function
         * cannot return data if function modifies contract
+        * example:
+            * if a contract is deployed and has a function available, then any user with an address can interact with the contract and read or modify its contents (depending on what the function does)
+            * if account 0x17f deploys the contract that has a function that changes a state variable
+                * account 0x5c6 can call the state variable or change the state variable of the contract
+                * account 0x036 can do the same, etc
     * private: only the contracts code can call this function
-            * cannot return data if function modifies contract
+        * cannot return data if function modifies contract
     * view: this function returns data and does NOT modify the contract's data
         * interchangeable with "constant"
         * essentially is a "read only"
@@ -165,6 +170,23 @@
         * 300 wei/gas * 14 gas = 4,200 wei > 3,000 wei we were willing to pay to execute the transaction
 
 
+## Mnemonic Phrases
+* A user can have many different accounts (i.e., MetaMask accounts)
+    * One address to spend money
+    * One address for savings
+    * One address for business
+* Each account will have:
+    * An address
+    * A public key
+    * A private key
+* So in total 3 addresses will have 3 "properties" or "identifiers" = 9 identifiers to manage in total
+* This is a lot of information to handle, so Ethereum invented the concept of 12 word Mnemonic
+    * The 12 word mnemonic allows us to generate a series of different accounts with a public key, private key, and address
+* The 12 words are fed into a BIP39 mnemonic algorithm which produces the same list of accounts every time
+    * So all public and private keys for each account is derived from the mnemonic phrase
+    * IT IS MUCH MORE IMPORTANT TO KEEP THE MNEMONIC PHRASE SAFE THAN INDIVIDUAL ADDRESSES/PK!
+* To get a new mnemonic phrase, you need to uninstall/reinstall metamask
+* You can rederive all accounts/addresses/pk but entering your mnemonic phrase at https://iancoleman.io/bip39/
 
 
 
