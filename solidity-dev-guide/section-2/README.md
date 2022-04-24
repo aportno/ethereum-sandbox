@@ -279,3 +279,4 @@ describe('Car', () => {
 * This method key, value shows the functions available to our contract
     * `setMessage` is the function we use to change the state variable on the contract
     * `message` is the read only variable that tells us the value of the state variable `message` on the contract
+
