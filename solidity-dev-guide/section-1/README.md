@@ -85,7 +85,36 @@
 * Use compiler: 0.4.17+commit.bdeb9e52
 * Compiler configuration: auto compile
 
-## Writing the first contract
+## Writing contracts in Remix
+* State (storage) variables are values permanently stored in contract storage on the blockchain
+* Local variables have values that are present till function is executing
+* Constructor functions are automatically called one time when the contract is first created
+    * These name of these functions should match the contract name
+* Function types:
+    * public: anyone with account can call this function
+        * cannot return data if function modifies contract
+    * private: only the contracts code can call this function
+            * cannot return data if function modifies contract
+    * view: this function returns data and does NOT modify the contract's data
+        * interchangeable with "constant"
+        * essentially is a "read only"
+    * pure: function will not modify or even read the contract's data
+        * similar to view but is more strict
+    * payable: when someone call this function they might send ether along
+
+## Deploying contract in Remix
+* Compile script
+* Navigate to "deploy & run transactions"
+* Set environment to JavaScript VM (London)
+* Choose account to act as the sender
+    * Remix has a "small" test environment that sets up a number of accounts with pre-funded ETH. Selecting any of these accounts is acceptable
+* Gas limit can remain the default value for now
+* Value of wei can remain zero for now
+* Select the contract we'd like to test deploy
+* Hit deploy
+* Deployed contracts will populate in the bottom left
+
+
 
 
 
