@@ -132,4 +132,150 @@ SWAP1 JUMP JUMPDEST PUSH2 0x272 SWAP2 SWAP1 JUMPDEST DUP1 DUP3 GT ISZERO PUSH2 0
 * The objects we really care about are:
     * ```bytecode:``` is the actual bytecode we are going to deploy to the ethereum network
     * ```interface``` is our contracts ABI (the communication layer between the solidity world ans the JS world)
+
+* We need to make sure the compile.js file can be required (or made available) to other files inside of our project so we have access to our compiled source code
+    * we add ```module.exports = solc.compile(source, 1).contracts[':Inbox'];```
+    * this allows us to export the compile object that contains all of the contracts that were compiled
+        * *Note: the ```:``` before ``Inbox`` is pulled directly from the JSON key name
+* So this `compile.js` script will take out our raw contract code and produce the ABI and bytecode for the contract, where the bytecode can be deployed to some network
+
+
+## Testing Architecture
+* Solidity compiler
+    * Bytecode
+        * Deploy
+            * Contract instance (Ganache/TestRPC)
+                * local test network is created by Ganache
+    * ABI
+        * Web3
+            * Web3 -> Contract instance
+
+## Installing modules
+* `cd` to `inbox`
+* run `npm install --save mocha ganache-cli web3`
+
+## Installing dependencies
+* We require (or import) the assert module that is built-in to node. It is used to make assertions about tests
+* We require `ganache-cli` to serve as our local ethereum test network
+* We require `Web3`
+    * Note it is capitalized because its a constructor, and will be used to make instances of the Web3 library
+
+## Web3 Versioning
+* Web3 is used to communicate JS app and Ethereum network (its the portal to the Ethereum world)
+* We installed the new Web3 (v1.x.x) but most documentation on the web (i.e., stack overflow) references the old Web3 (v0.x.x)
+* V1 has support for promises + async/await
+
+## Web3 Providers
+* `const Web3 = requre('web3');`
+* This is a constructor function that is used to create multiple instances of the Web3 library in one project
+* The purpose of each instance is to connect with a different Ethereum network
+    * It's generally unnecssary to work with more than one network so most of the time we will be working with only one instance at a time
+* So we use the constructor to make an instance of `Web3`
+    * Whenever we make an instance of `Web3` we have to do some configurations of the new instance
+        * We need a "provider" which is somewhat of a communication layer between the `web3` library and some specific ethereum network
+        * If we do not provide a "provider" than `web3` is going to complain
+    * `const web3 = new Web3(ganache.provider());`
+        * This is an instance of `Web3` and tells that instance to attempt to connect to our local test network running on our machine
+        * Eventually when we want to deploy to Rinkeyby testnet, or the Mainnet, we will update this to something like:
+            * `const web3 = new Web3(<SOME PROVIDER>);`
+
+## Testing with Mocha
+* Mocha is a general purpose testing framework
+* Mocha functions
+    * it = run a test and make an assertion (checks two values to make sure they are the same i.e., value produced vs expected value)
+    * describe = groups together "it" functions
+    * beforeEach = execute some general setup code
+* Referring to test block in `Inbox.test.js`, we setup our test contraints
+    * `
+    describe('Car', () => {
+    it('can park', () => {
+        const car = new Car();
+        assert.equal(car.park(), 'stopped');
+        });
+    });
+    `
+        * 'Car' is simply the name of our describe test
+        * 'can park' is simply the name of one single test
+        * Overall we are making sure calling the park function of our `Car` instance will return the desired values
+* We use `npm run test` in `Inbox` to see the results of our test
+
+
+## Mocha test examples:
+```
+class Car {
+    park() {
+        return 'stopped';
+    }
+
+    drive() {
+        return 'vroom';
+    }
+}
+
+let car;
+
+beforeEach(() => {
+    car = new Car();
     
+});
+
+describe('Car', () => {
+    it('can park', () => {
+        assert.equal(car.park(), 'stopped');
+    });
+
+    it('can drive', () => {
+        assert.equal(car.drive(), 'vroom');
+    });
+});
+```
+
+## Mocha Structure
+* Cycle
+    * Mocha starts and automatically loads our `Inbox.test.js` file and executes our tests
+    * Deploy a new contract using the contracts bytecode (on ganache local network)
+        * beforeEach
+    * Manipulate the contract
+        * it
+    * Make an assertion about the contract
+        * it
+
+## Fetching accounts from Ganache
+* Web3
+    * Ganache Local Test Network
+        * Unlocked Accounts
+            * Sample account 1
+            * Sample account 2
+            * etc
+* We get a list of accounts using `web3.eth.getAccounts()`
+    * Every function we call in `web3` is asynchronous in nature, meaning its always going to be returning a promise that gets resolved
+    * To get access to the list of accounts, we use `.then(fetchedAccounts)` and then use `console.log` to log out the accounts that we've fetched
+* Contract Test
+
+    * `inbox = await new web3.eth.Contract(JSON.parse(interface)) 
+    .deploy({ data: bytecode, arguments: ['Hi there!'] })
+    .send({ from: accounts[0], gas: '1000000' });`
+        * `new web3.eth.Contract(JSON.parse(interface))` accesses the web3 ethereum module contract property
+            * `JSON.parse(interface)` argument is the contracts ABI that spits out a JSON representation of the interface
+            * it is a generic contract object
+        * `.deploy({ data: bytecode, arguments: ['Hi there!'] })` 
+            * tells web3 we want to deploy a new contract
+            * it creates a transaction object that has the `data` property (which is where we specify the bytecode for the contract) and the `arguments` property (which is an array of arguments we pass into the constructor when the contract is created)
+                * Recall in our `Inbox.sol` file, the constructor takes in a `string initialMessage`
+        * `.send({ from: accounts[0], gas: '1000000' });` instructs web3 to send out a transaction that creates this contract
+
+## Deployed contract overview
+* Result from our test
+
+    `  methods: {
+        setMessage: [Function: bound _createTxObject],
+        '0x368b8772': [Function: bound _createTxObject],
+        'setMessage(string)': [Function: bound _createTxObject],
+        message: [Function: bound _createTxObject],
+        '0xe21f37ce': [Function: bound _createTxObject],
+        'message()': [Function: bound _createTxObject]
+    }
+    `
+* This method key, value shows the functions available to our contract
+    * `setMessage` is the function we use to change the state variable on the contract
+    * `message` is the read only variable that tells us the value of the state variable `message` on the contract
