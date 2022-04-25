@@ -306,3 +306,15 @@ describe('Car', () => {
 * check package.json to ensure dotenv is setup as a dependency
 * create a `.env` file and add relevant keys
 * create `.gitignore` file and add `.env`
+
+## Deploying contract on Rinkeby
+* run `node deploy.js`
+* Navigate to https://rinkeby.etherscan.io/
+* Search for contract using result from `deploy.js`
+
+## Interacting with contract on Rinkeby
+* Go to Remix IDE
+* Select "injected web3" as an environment and connet MetaMask account
+* Paste contract address using "At Address"
+* You'll notice reading the message on the contract does not cost anything (as expected), however setting a new message costs gas (because we're modifying the data on the blockchain!)
+
