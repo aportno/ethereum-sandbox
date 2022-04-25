@@ -1,6 +1,6 @@
 const HDWalletProvider = require('@truffle/hdwallet-provider');
 const Web3 = require('web3');
-const { interface, bytecode } = require('./compile');
+const { abi, evm } = require('./compile');
 require('dotenv').config();
 
 const INITIAL_STRING = 'First deployment!'

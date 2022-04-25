@@ -263,6 +263,16 @@ describe('Car', () => {
             * it creates a transaction object that has the `data` property (which is where we specify the bytecode for the contract) and the `arguments` property (which is an array of arguments we pass into the constructor when the contract is created)
                 * Recall in our `Inbox.sol` file, the constructor takes in a `string initialMessage`
         * `.send({ from: accounts[0], gas: '1000000' });` instructs web3 to send out a transaction that creates this contract
+    * ``    it('has default message', async () => {
+        const message = await inbox.methods.message().call();
+        assert.equal(message, INITIAL_STRING);})``
+        * we are using `methods` to gain access to our contract. We are using call() because instead of modifying our contract, we are just looking to return data
+    * ``    it('can set message', async () => {
+        await inbox.methods.setMessage(NEW_MESSAGE).send({ from: accounts[0] });})``
+        * `setMessage` requires a string hence we include `NEW_MESSAGE` which is a `const` that says "First response!"
+        * we are again calling `methods` to gain access to our contract. We are modifying data by setting a new message so we'll be "transacting" with the smart contract, so we'll be using a `send()`
+        * `send()` requires an account to be specified "where the transaction is being sent from"
+
 
 ## Deployed contract overview
 * Result from our test
@@ -279,4 +289,20 @@ describe('Car', () => {
 * This method key, value shows the functions available to our contract
     * `setMessage` is the function we use to change the state variable on the contract
     * `message` is the read only variable that tells us the value of the state variable `message` on the contract
+* We are going to be calling `methods` anytime we are looking to interact with our contract
 
+## Test Overview (with Ganache)
+* Test deploy the smart contract
+* Test all functions available in the smart contract
+
+## Infura signup
+* https://infura.io/
+* You must create a new project to get an API key
+* https://rinkeby.infura.io/v3/802abacf3e634d3d8f9b10dac8e30c8f
+
+## Wallet provider setup
+* run `npm install @truffle/hdwallet-provider` in `inbox`
+* `npm install dotenv`
+* check package.json to ensure dotenv is setup as a dependency
+* create a `.env` file and add relevant keys
+* create `.gitignore` file and add `.env`
