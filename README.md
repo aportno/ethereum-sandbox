@@ -1,2 +1,0 @@
-# ethereum-sandbox
-Study Ethereum
