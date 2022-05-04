@@ -67,4 +67,36 @@
 * the line `_;` is essentially a placeholder for the code block inside the function
 
 ## Testing our script
-* 
+* we can run `npm node test` in the `contracts` directory
+* Sample tests (what behavior do we care about in our contract?):
+    * Entering the lottery (we want to be 100% sure a players address gets added to the pool):
+        * We will assert the players address is in the array
+        * We can access the players array by getPlayers()
+        * `await lottery.methods.enter().send();`
+            * why call() vs send()?
+                * solidity functions can be divided into two categories:
+                    * functions that alter the state of the contract
+                        * we should use methods.function().send()
+                        * creates transaction or alter's the state
+                    * functions that do not alter the state of the contract
+                        * we should use methods.function().call()
+                        * generalyl functions with `pure` or `view` function type keywords
+            * We are using `send()` because we are going to be "paying" some amount of money to the contract (greater than 1 ETH)
+            * `value: web3.utils.toWei('1.5', 'ether')` is used to convert 1.5 ether into wei (given Mocha requires wei)
+        * the `methods` call allows us to test the functions inside the smart contract
+        * of course, we need to call the `contract` instance `lottery` first
+        * `        const players = await lottery.methods.getPlayers().call({
+            from: accounts[0]
+        });` block returns all players added to the pool. This is being called `from` the first account in accounts i.e., `accounts[0]`
+    * Sending ether to the pool
+        * We use `try-catch` handling
+        * First we try to send `0 wei` to the contract using the `enter()` function which requires greater than 1 ether to be sent to the contract
+        * `assert(err);` is used because it checks if the variable passed in i.e., `err` returns some truthy value
+            * `assert.ok()` is used to check for some sort of existence
+            * this only gets thrown when something goes wrong, and we are testing that a minimum requirement is meant
+        * `assert(false)` is used to trigger the catch block
+    * Send money to winner and reset pool
+        * `const initialBalance = await web3.eth.getBalance(accounts[0]);` to get the amount of ether assigned to that specific address
+
+
+
