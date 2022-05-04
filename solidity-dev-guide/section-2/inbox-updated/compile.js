@@ -21,7 +21,11 @@ const input = {
     },
   };
 
-  module.exports = JSON.parse(solc.compile(JSON.stringify(input))).contracts[
-    'Inbox.sol'
-  ].Inbox;
+console.log(source);
+console.log(solc);
+console.log(JSON.stringify(input));
+
+module.exports = JSON.parse(solc.compile(JSON.stringify(input))).contracts[
+  'Inbox.sol'
+].Inbox;
 

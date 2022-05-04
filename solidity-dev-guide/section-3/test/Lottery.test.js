@@ -6,8 +6,6 @@ const web3 = new Web3(ganache.provider());
 const { abi, evm } = require('../compile');
 const contractName = 'Lottery Contract';
 
-console.log(abi)
-
 let lottery;
 let accounts;
 

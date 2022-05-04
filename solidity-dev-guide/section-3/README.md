@@ -65,4 +65,6 @@
 ## Function Modifiers
 * Function modifiers are used to help reduce the amount of code we need to write
 * the line `_;` is essentially a placeholder for the code block inside the function
+
+## Testing our script
 * 

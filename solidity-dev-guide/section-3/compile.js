@@ -3,14 +3,13 @@ const path = require('path');
 const fs = require('fs');
 const solc = require('solc');
 
-const contractFileName = 'Lottery.sol';
-const contractPath = path.resolve(__dirname, 'contracts', contractFileName);
+const contractPath = path.resolve(__dirname, 'contracts', 'Lottery.sol');
 const source = fs.readFileSync(contractPath, 'utf8');
 
 const input = {
     language: 'Solidity',
     sources: {
-        contractFileName: {
+      'Lottery.sol': {
         content: source,
       },
     },
@@ -23,4 +22,4 @@ const input = {
     },
   };
 
-module.exports = JSON.parse(solc.compile(JSON.stringify(input))).contracts[contractFileName].Lottery;
+ module.exports = JSON.parse(solc.compile(JSON.stringify(input))).contracts['Lottery.sol'].Lottery;
