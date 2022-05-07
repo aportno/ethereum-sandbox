@@ -7,3 +7,4 @@
 
 ### Debugs:
 * Section 3 - cannot compile successfully with the variable `const contractFileName = 'Lottery.sol';`. The actual name `contractFileName` is considered a string in the compiler
+
