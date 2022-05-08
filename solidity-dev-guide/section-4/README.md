@@ -16,3 +16,5 @@
 * The user (or "client") is responsible for writing any data inside our application so most of the code we are writing is executed inside the users browser
     * React JS is the preferred library to simplify complex code inside the browser
 
+## Boilerplate and React App Updates
+* run `npx create-react-app lottery-react`
